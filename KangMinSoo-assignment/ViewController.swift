@@ -128,6 +128,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchTextField.delegate = self
+        navigationController?.isNavigationBarHidden = true
         weatherButton.addTarget(self, action: #selector(weatherButtonTapped), for: .touchUpInside)
         setupNavigation()
         setupButtonLayout()
