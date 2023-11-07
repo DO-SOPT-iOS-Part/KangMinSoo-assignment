@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  WeatherListVC.swift
 //  KangMinSoo-assignment
 //
 //  Created by 강민수 on 10/14/23.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+class WeatherListVC: UIViewController {
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -231,6 +231,6 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension WeatherListVC: UITextFieldDelegate {
     
 }
