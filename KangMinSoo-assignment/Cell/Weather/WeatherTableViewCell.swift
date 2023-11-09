@@ -1,5 +1,5 @@
 //
-//  WeatherCollectionViewCell.swift
+//  WeatherTableViewCell.swift
 //  KangMinSoo-assignment
 //
 //  Created by 강민수 on 11/7/23.
@@ -10,11 +10,11 @@ import UIKit
 import SnapKit
 import Then
 
-class WeatherCollectionViewCell: UICollectionViewCell {
+class WeatherTableViewCell: UITableViewCell {
     
-    static let identifier: String = "WeatherCollectionViewCell"
+    static let identifier: String = "WeatherTableViewCell"
     
-    private let backgroundImage = UIImageView()
+    private let backgroundImageView = UIImageView()
     private let locationTitleLabel = UILabel()
     private let locationLabel = UILabel()
     private let currentWeatherLabel = UILabel()
@@ -22,8 +22,8 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     private let highTemperatureLabel = UILabel()
     private let lowTemperatureLabel = UILabel()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
         hieararchy()
         setLayout()
@@ -34,7 +34,11 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     }
     
     func configureUI() {
-        backgroundImage.do {
+        self.do {
+            $0.backgroundColor = .black
+        }
+        
+        backgroundImageView.do {
             $0.image = Image.weatherListBackground
             $0.contentMode = .scaleAspectFill
             $0.layer.cornerRadius = 16
@@ -79,47 +83,48 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     }
     
     func hieararchy() {
-        contentView.addSubViews(backgroundImage,
-                                locationTitleLabel,
-                                locationLabel,
-                                currentWeatherLabel,
-                                currentTemperatureLabel,
-                                highTemperatureLabel,
-                                lowTemperatureLabel)
+        contentView.addSubViews(backgroundImageView)
+        
+        backgroundImageView.addSubViews(locationTitleLabel,
+                                        locationLabel,
+                                        currentWeatherLabel,
+                                        currentTemperatureLabel,
+                                        highTemperatureLabel,
+                                        lowTemperatureLabel)
     }
     
     func setLayout() {
-        backgroundImage.snp.makeConstraints {
-            $0.size.equalToSuperview()
+        backgroundImageView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.equalToSuperview().inset(8)
         }
         
         locationTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(10)
-            $0.leading.equalTo(contentView.snp.leading).offset(16)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(10)
+            $0.leading.equalTo(backgroundImageView.snp.leading).offset(16)
         }
         
         locationLabel.snp.makeConstraints {
             $0.top.equalTo(locationTitleLabel.snp.bottom).offset(2)
-            $0.leading.equalTo(contentView.snp.leading).offset(16)
+            $0.leading.equalTo(backgroundImageView.snp.leading).offset(16)
         }
         
         currentWeatherLabel.snp.makeConstraints {
-            $0.bottom.equalTo(contentView.snp.bottom).inset(10)
-            $0.leading.equalTo(contentView.snp.leading).offset(16)
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).inset(10)
+            $0.leading.equalTo(backgroundImageView.snp.leading).offset(16)
         }
         
         currentTemperatureLabel.snp.makeConstraints {
-            $0.top.equalTo(contentView.snp.top).offset(4)
-            $0.trailing.equalTo(contentView.snp.trailing).inset(16)
+            $0.top.equalTo(backgroundImageView.snp.top).offset(4)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).inset(16)
         }
         
         lowTemperatureLabel.snp.makeConstraints {
-            $0.bottom.equalTo(contentView.snp.bottom).inset(10)
-            $0.trailing.equalTo(contentView.snp.trailing).inset(16)
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).inset(10)
+            $0.trailing.equalTo(backgroundImageView.snp.trailing).inset(16)
         }
         
         highTemperatureLabel.snp.makeConstraints {
-            $0.bottom.equalTo(contentView.snp.bottom).inset(10)
+            $0.bottom.equalTo(backgroundImageView.snp.bottom).inset(10)
             $0.trailing.equalTo(lowTemperatureLabel.snp.leading).offset(-6)
         }
     }

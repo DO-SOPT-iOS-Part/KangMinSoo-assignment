@@ -22,4 +22,5 @@ public enum Image {
     static let listBullet = UIImage(systemName: "list.bullet")?.withRenderingMode(.alwaysTemplate)
     static let locationFill = UIImage(systemName: "location.fill")?.withRenderingMode(.alwaysTemplate)
     static let circleFill = UIImage(systemName: "circle.fill")?.withRenderingMode(.alwaysTemplate)
+    static let ellipsisCircle = UIImage(systemName: "ellipsis.circle")?.withTintColor(.white, renderingMode: .alwaysOriginal)
 }

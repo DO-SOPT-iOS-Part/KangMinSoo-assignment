@@ -16,32 +16,21 @@ class WeatherListVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupNavigation()
         delegate()
-        
         hieararchy()
         setLayout()
     }
     
     func setupNavigation() {
-        navigationController?.isNavigationBarHidden = false
-        
-        if let ellipsisImage = UIImage(systemName: "ellipsis.circle") {
-            let whiteEllipsisImage = ellipsisImage.withTintColor(.white, renderingMode: .alwaysOriginal)
-            
-            let ellipsisButton = UIBarButtonItem(image: whiteEllipsisImage, style: .plain, target: self, action: #selector(ellipsisButtonTapped))
-            
-            navigationItem.rightBarButtonItem = ellipsisButton
-        }
+        navigationController?.isNavigationBarHidden = true
     }
     
     private func delegate() {
         weatherListView.searchBar.delegate = self
-        weatherListView.weatherCollectionView.register(WeatherCollectionViewCell.self,
-                                forCellWithReuseIdentifier: WeatherCollectionViewCell.identifier)
-        weatherListView.weatherCollectionView.delegate = self
-        weatherListView.weatherCollectionView.dataSource = self
+        weatherListView.weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.identifier)
+        weatherListView.weatherTableView.delegate = self
+        weatherListView.weatherTableView.dataSource = self
     }
     
     func hieararchy() {
@@ -50,9 +39,7 @@ class WeatherListVC: UIViewController {
     
     private func setLayout() {
         weatherListView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.edges.equalToSuperview()
         }
     }
 
@@ -71,30 +58,20 @@ extension WeatherListVC: UISearchBarDelegate {
     }
 }
 
-extension WeatherListVC: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let nextVC = DetailWeatherVC()
-        navigationController?.pushViewController(nextVC, animated: true)
-    }
-}
-extension WeatherListVC: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+extension WeatherListVC: UITableViewDelegate {}
+extension WeatherListVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCollectionViewCell.identifier,
-                                                            for: indexPath) as? WeatherCollectionViewCell else {return UICollectionViewCell()}
-        return item
-    }
-}
-
-extension WeatherListVC: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
+        return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (Size.width - 40) , height: 117)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailWeatherVC = DetailWeatherVC()
+        self.navigationController?.pushViewController(detailWeatherVC, animated: true)
     }
 }
