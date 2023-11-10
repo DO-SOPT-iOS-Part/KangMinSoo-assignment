@@ -18,17 +18,26 @@ class DetailWeatherView: UIView {
     private let detailWeatherTopView = DetailWeatherTopView()
     let detailWeatherBoxView = DetailWeatherBoxView()
     let detailWeatherBottomView = DetailWeatherBottomView()
+    let tenDayTableHeaderView = TenDayTableHeaderView()
+    var tenDayWeatherTableView = UITableView(frame: .zero, style: .plain)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
         hieararchy()
         setLayout()
+        delegate()
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func delegate() {
+        tenDayWeatherTableView.register(TenDayWeatherTableViewCell.self, forCellReuseIdentifier: TenDayWeatherTableViewCell.identifier)
+        tenDayWeatherTableView.delegate = self
+        tenDayWeatherTableView.dataSource = self
     }
     
     func configureUI() {
@@ -43,6 +52,14 @@ class DetailWeatherView: UIView {
             $0.alwaysBounceVertical = true
         }
         
+        tenDayWeatherTableView.do {
+            $0.backgroundColor = .clear
+            $0.isScrollEnabled = false
+            $0.layer.cornerRadius = 15
+            $0.layer.borderWidth = 0.5
+            $0.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25).cgColor
+            $0.tableHeaderView = tenDayTableHeaderView
+        }
     }
     
     func hieararchy() {
@@ -52,9 +69,9 @@ class DetailWeatherView: UIView {
         
         verticalScrollView.addSubview(verticalContentView)
         verticalContentView.addSubViews(detailWeatherTopView,
-                                        detailWeatherBoxView)
+                                        detailWeatherBoxView,
+                                        tenDayWeatherTableView)
     }
-    
     
     func setLayout() {
         
@@ -86,6 +103,17 @@ class DetailWeatherView: UIView {
             $0.width.equalTo(Size.width - 40)
         }
         
+        tenDayWeatherTableView.snp.makeConstraints {
+            $0.top.equalTo(detailWeatherBoxView.snp.bottom).offset(44)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(588)
+            $0.bottom.equalTo(verticalContentView.snp.bottom)
+        }
+        
+        tenDayWeatherTableView.tableHeaderView?.frame = .init(origin: .zero,
+                                                                 size: .init(width: UIScreen.main.bounds.width,
+                                                                             height: 38))
+        
         detailWeatherBottomView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide)
@@ -95,3 +123,17 @@ class DetailWeatherView: UIView {
     
 }
 
+
+extension DetailWeatherView: UITableViewDelegate {}
+extension DetailWeatherView: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TenDayWeatherTableViewCell.identifier,
+                                                       for: indexPath) as? TenDayWeatherTableViewCell else {return UITableViewCell()}
+        cell.selectionStyle = .none
+        return cell
+    }
+}
