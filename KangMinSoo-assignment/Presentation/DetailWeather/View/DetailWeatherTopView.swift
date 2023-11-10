@@ -1,5 +1,5 @@
 //
-//  DetailTopView.swift
+//  DetailWeatherTopView.swift
 //  KangMinSoo-assignment
 //
 //  Created by 강민수 on 11/7/23.
@@ -72,11 +72,10 @@ class DetailWeatherTopView: UIView {
     }
     
     func setLayout() {
+        
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
     
 }
-
-
