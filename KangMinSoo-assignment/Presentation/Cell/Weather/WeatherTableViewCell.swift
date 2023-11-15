@@ -52,31 +52,26 @@ class WeatherTableViewCell: UITableViewCell {
         }
         
         locationLabel.do {
-            $0.text = "의정부시"
             $0.font = .medium(size: 17)
             $0.textColor = .white
         }
         
         currentWeatherLabel.do {
-            $0.text = "흐림"
             $0.font = .medium(size: 16)
             $0.textColor = .white
         }
         
         currentTemperatureLabel.do {
-            $0.text = "21°"
             $0.font = .light(size: 52)
             $0.textColor = .white
         }
         
         highTemperatureLabel.do {
-            $0.text = "최고:29°"
             $0.font = .medium(size: 15)
             $0.textColor = .white
         }
         
         lowTemperatureLabel.do {
-            $0.text = "최저:15°"
             $0.font = .medium(size: 15)
             $0.textColor = .white
         }
@@ -129,8 +124,12 @@ class WeatherTableViewCell: UITableViewCell {
         }
     }
     
-    
-    func bindData() {
-        
+    func bindData(weatherResponse: WeatherResponse) {
+        locationTitleLabel.text = weatherResponse.name
+        locationLabel.text = weatherResponse.name
+        currentWeatherLabel.text = weatherResponse.weather[0].description
+        currentTemperatureLabel.text = String(Int(weatherResponse.main.temp)) + "˚"
+        lowTemperatureLabel.text = "최고:" + String(Int(weatherResponse.main.tempMin)) + "˚"
+        highTemperatureLabel.text = "최저:" + String(Int(weatherResponse.main.tempMax)) + "˚"
     }
 }
