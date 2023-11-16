@@ -124,9 +124,19 @@ class WeatherTableViewCell: UITableViewCell {
         }
     }
     
+    func changeTime() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        
+        let currentTime = Date()
+        let formattedTime = dateFormatter.string(from: currentTime)
+        
+        return formattedTime
+    }
+    
     func bindData(weatherResponse: WeatherResponse) {
         locationTitleLabel.text = weatherResponse.name
-        locationLabel.text = weatherResponse.name
+        locationLabel.text = changeTime()
         currentWeatherLabel.text = weatherResponse.weather[0].description
         currentTemperatureLabel.text = String(Int(weatherResponse.main.temp)) + "˚"
         lowTemperatureLabel.text = "최고:" + String(Int(weatherResponse.main.tempMin)) + "˚"

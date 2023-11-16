@@ -56,7 +56,7 @@ class WeatherListVC: UIViewController {
     func getWeatherData() {
         Task {
             do {
-                let cities = ["seoul", "london", "tokyo", "beijing", "new york", "washington"]
+                let cities = ["seoul", "suwon", "yeoju", "beijing", "tokyo", "Gwangjin-gu"]
                 
                 for cityName in cities {
                     do {
