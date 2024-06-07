@@ -13,6 +13,7 @@ import Then
 class WeatherListVC: UIViewController {
     
     private var weatherListView = WeatherListView()
+    private var weatherResponse: [WeatherResponse] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,11 @@ class WeatherListVC: UIViewController {
         delegate()
         hieararchy()
         setLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        getWeatherData()
     }
     
     func setupNavigation() {
@@ -46,6 +52,29 @@ class WeatherListVC: UIViewController {
     @objc func ellipsisButtonTapped() {
         print("ellipsisButton이 클릭되었습니다.")
     }
+    
+    func getWeatherData() {
+        Task {
+            do {
+                let cities = ["seoul", "suwon", "yeoju", "beijing", "tokyo", "Gwangjin-gu"]
+                
+                for cityName in cities {
+                    do {
+                        if let receivedData = try await WeatherGetService.shared.getWeatherData(cityName: cityName) {
+                            weatherResponse.append(receivedData)
+                        }
+                    } catch {
+                        print("Failed to get weather data")
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.weatherListView.weatherTableView.reloadData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 extension WeatherListVC: UISearchBarDelegate {
@@ -61,12 +90,13 @@ extension WeatherListVC: UISearchBarDelegate {
 extension WeatherListVC: UITableViewDelegate {}
 extension WeatherListVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return weatherResponse.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: WeatherTableViewCell.identifier, for: indexPath) as? WeatherTableViewCell else { return UITableViewCell() }
         cell.selectionStyle = .none
+        cell.bindData(weatherResponse: weatherResponse[indexPath.row])
         return cell
     }
     
